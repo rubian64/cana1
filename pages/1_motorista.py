@@ -2,22 +2,9 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 
-# Conexão com o banco de dados SQLite
-conn = sqlite3.connect('motoristas.db')
+conn = sqlite3.connect('cana.db')
 c = conn.cursor()
 
-# Criação da tabela de motoristas
-c.execute('''
-          CREATE TABLE IF NOT EXISTS motorista (
-            idmotorista INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT,
-            telefone TEXT,
-            endereco TEXT
-          )
-          ''')
-conn.commit()
-
-# Funções CRUD
 def criar_motorista(nome, telefone, endereco):
     c.execute('INSERT INTO motorista (nome, telefone, endereco) VALUES (?, ?, ?)',
               (nome, telefone, endereco))
@@ -39,13 +26,14 @@ def deletar_motorista(idmotorista):
 
 # Interface do Streamlit
 def main():
-    st.title("Cadastro de Motorista - CANA EXPRESS")
-
-    menu = ["Criar", "Ler", "Atualizar", "Deletar"]
+    st.title("Motorista")
+    st.sidebar.title("CANA EXPRESS")
+    st.sidebar.subheader("Motorista")
+    menu = ["Adicionar", "Listar", "Atualizar", "Apagar"]
     escolha = st.sidebar.selectbox("Menu", menu)
 
-    if escolha == "Criar":
-        st.subheader("Adicionar Novo Motorista")
+    if escolha == "Adicionar":
+        st.subheader("Adicionar")
         with st.form(key='criar_motorista'):
             nome = st.text_input("Nome")
             telefone = st.text_input("Telefone")
@@ -56,7 +44,7 @@ def main():
             criar_motorista(nome, telefone, endereco)
             st.success("Motorista cadastrado com sucesso!")
 
-    elif escolha == "Ler":
+    elif escolha == "Listar":
         st.subheader("Visualizar Motoristas")
         resultado = ler_motoristas()
         df = pd.DataFrame(resultado, columns=["ID", "Nome", "Telefone", "Endereço"])
@@ -75,7 +63,7 @@ def main():
             atualizar_motorista(idmotorista, nome, telefone, endereco)
             st.success("Motorista atualizado com sucesso!")
 
-    elif escolha == "Deletar":
+    elif escolha == "Apagar":
         st.subheader("Deletar Motorista")
         with st.form(key='deletar_motorista'):
             idmotorista = st.number_input("ID do Motorista", min_value=1)
