@@ -18,11 +18,25 @@ def login():
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if username in users and users[username] == hashed_password:
             st.success("Login realizado com sucesso!")
-            # Redirecionar para a área de cliente
-            st.write("Bem-vindo(a),", username)
+            # Libera o menu após a autenticação
+            st.sidebar.title("Menu")
+            st.sidebar.write("Agora você pode acessar as funcionalidades.")
+            # Adicione as opções do menu aqui
+            if st.sidebar.button("Opção 1"):
+                st.write("Você selecionou a Opção 1")
+            if st.sidebar.button("Opção 2"):
+                st.write("Você selecionou a Opção 2")
+
+            # ... outras opções do menu
         else:
             st.error("Usuário ou senha inválidos.")
 
+# Bloqueia o menu inicialmente
+st.sidebar.title("Menu")
+st.sidebar.write("Faça login para desbloquear o menu.")
+st.sidebar.write("")  # Adiciona um espaço em branco
+st.sidebar.write("")  # Adiciona um espaço em branco
+st.sidebar.write("")  # Adiciona um espaço em branco
 
 if __name__ == "__main__":
     login()
