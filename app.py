@@ -9,24 +9,28 @@ users = {
     "usuario2": hashlib.sha256("senha456".encode()).hexdigest(),
 }
 
+# Inicializar o estado da sessão
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+# Criar os widgets de input fora do loop
+if "username_input" not in st.session_state:
+    st.session_state.username_input = st.text_input("Usuário")
+
+if "password_input" not in st.session_state:
+    st.session_state.password_input = st.text_input("Senha", type="password")
+
 
 def login():
     st.title("Tela de Login")
 
-    username = st.session_state.get("username", "") 
-    password = st.session_state.get("password", "")
-
-    username = st.text_input("Usuário", value=username)
-    password = st.text_input("Senha", type="password", value=password)
-
     if st.button("Entrar"):
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        if username in users and users[username] == hashed_password:
+        hashed_password = hashlib.sha256(st.session_state.password_input.encode()).hexdigest()
+        if st.session_state.username_input in users and users[st.session_state.username_input] == hashed_password:
             st.success("Login realizado com sucesso!")
-            st.session_state.logged_in = True  # Define como logado
+            st.session_state.logged_in = True
         else:
             st.error("Usuário ou senha inválidos.")
-            st.session_state.logged_in = False
 
 
 def menu():
@@ -36,12 +40,9 @@ def menu():
             st.write("Você selecionou a Opção 1")
         if st.sidebar.button("Opção 2"):
             st.write("Você selecionou a Opção 2")
-        # ... outras opções do menu
 
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
+# Loop que executa a função de login até que o usuário esteja logado
 while not st.session_state.logged_in:
     login()
 
