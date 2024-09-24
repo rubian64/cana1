@@ -10,29 +10,16 @@ users = {
 }
 
 
-# Inicializar o estado da sessão
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-# Criar os widgets de input fora do loop
-if "username_input" not in st.session_state:
-    st.session_state.username_input = st.text_input("Usuário")
-
-if "password_input" not in st.session_state:
-    st.session_state.password_input = st.text_input("Senha", type="password")
-
-if "login_button" not in st.session_state:
-    st.session_state.login_button = st.button("Entrar")
-
-
 def login():
     st.title("Tela de Login")
-
-    if st.session_state.login_button:
-        hashed_password = hashlib.sha256(st.session_state.password_input.encode()).hexdigest()
-        if st.session_state.username_input in users and users[st.session_state.username_input] == hashed_password:
+    username = st.text_input("Usuário")
+    password = st.text_input("Senha", type="password")
+    if st.button("Entrar"):
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        if username in users and users[username] == hashed_password:
             st.success("Login realizado com sucesso!")
             st.session_state.logged_in = True
+            st.experimental_rerun()  # Reinicia a execução do script
         else:
             st.error("Usuário ou senha inválidos.")
 
@@ -46,8 +33,10 @@ def menu():
             st.write("Você selecionou a Opção 2")
 
 
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-# Loop que executa a função de login até que o usuário esteja logado
-while not st.session_state.logged_in:
+if not st.session_state.logged_in:
     login()
+else:
     menu()
