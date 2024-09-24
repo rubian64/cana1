@@ -9,30 +9,40 @@ users = {
     "usuario2": hashlib.sha256("senha456".encode()).hexdigest(),
 }
 
+
 def login():
     st.title("Tela de Login")
 
-    username = st.text_input("Usuário")
-    password = st.text_input("Senha", type="password")
+    username = st.session_state.get("username", "") 
+    password = st.session_state.get("password", "")
+
+    username = st.text_input("Usuário", value=username)
+    password = st.text_input("Senha", type="password", value=password)
+
     if st.button("Entrar"):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if username in users and users[username] == hashed_password:
             st.success("Login realizado com sucesso!")
-            return True  # Retorna True para indicar login bem-sucedido
+            st.session_state.logged_in = True  # Define como logado
         else:
             st.error("Usuário ou senha inválidos.")
-    return False  # Retorna False para indicar login inválido
+            st.session_state.logged_in = False
 
-# Loop principal que só termina com login válido
-logged_in = False
-while not logged_in:
-    logged_in = login() 
 
-# Se chegar aqui, o login foi bem-sucedido
-st.sidebar.title("Menu")
-if st.sidebar.button("Opção 1"):
-    st.write("Você selecionou a Opção 1")
-if st.sidebar.button("Opção 2"):
-    st.write("Você selecionou a Opção 2")
+def menu():
+    if st.session_state.logged_in:
+        st.sidebar.title("Menu")
+        if st.sidebar.button("Opção 1"):
+            st.write("Você selecionou a Opção 1")
+        if st.sidebar.button("Opção 2"):
+            st.write("Você selecionou a Opção 2")
+        # ... outras opções do menu
 
-# ... outras opções do menu
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+while not st.session_state.logged_in:
+    login()
+
+menu()
