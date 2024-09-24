@@ -9,6 +9,7 @@ users = {
     "usuario2": hashlib.sha256("senha456".encode()).hexdigest(),
 }
 
+
 # Inicializar o estado da sessão
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -20,11 +21,14 @@ if "username_input" not in st.session_state:
 if "password_input" not in st.session_state:
     st.session_state.password_input = st.text_input("Senha", type="password")
 
+if "login_button" not in st.session_state:
+    st.session_state.login_button = st.button("Entrar")
+
 
 def login():
     st.title("Tela de Login")
 
-    if st.button("Entrar"):
+    if st.session_state.login_button:
         hashed_password = hashlib.sha256(st.session_state.password_input.encode()).hexdigest()
         if st.session_state.username_input in users and users[st.session_state.username_input] == hashed_password:
             st.success("Login realizado com sucesso!")
@@ -40,6 +44,7 @@ def menu():
             st.write("Você selecionou a Opção 1")
         if st.sidebar.button("Opção 2"):
             st.write("Você selecionou a Opção 2")
+
 
 
 # Loop que executa a função de login até que o usuário esteja logado
