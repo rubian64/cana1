@@ -9,6 +9,11 @@ users = {
     "usuario2": hashlib.sha256("senha456".encode()).hexdigest(),
 }
 
+# Inicializar o estado de sessão
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+
 def login():
     st.title("Tela de Login")
 
@@ -18,25 +23,21 @@ def login():
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if username in users and users[username] == hashed_password:
             st.success("Login realizado com sucesso!")
-            # Libera o menu após a autenticação
-            st.sidebar.title("Menu")
-            st.sidebar.write("Agora você pode acessar as funcionalidades.")
-            # Adicione as opções do menu aqui
-            if st.sidebar.button("Opção 1"):
-                st.write("Você selecionou a Opção 1")
-            if st.sidebar.button("Opção 2"):
-                st.write("Você selecionou a Opção 2")
-
-            # ... outras opções do menu
+            st.session_state.logged_in = True  # Define como logado
         else:
             st.error("Usuário ou senha inválidos.")
 
-# Bloqueia o menu inicialmente
-st.sidebar.title("Menu")
-st.sidebar.write("Faça login para desbloquear o menu.")
-st.sidebar.write("motorista")  # Adiciona um espaço em branco
-st.sidebar.write("cliente")  # Adiciona um espaço em branco
-st.sidebar.write("usuario")  # Adiciona um espaço em branco
 
-if __name__ == "__main__":
-    login()
+def menu():
+    if st.session_state.logged_in:
+        st.sidebar.title("Menu")
+        if st.sidebar.button("Opção 1"):
+            st.write("Você selecionou a Opção 1")
+        if st.sidebar.button("Opção 2"):
+            st.write("Você selecionou a Opção 2")
+        # ... outras opções do menu
+
+
+# Chama as funções
+login()
+menu() 
