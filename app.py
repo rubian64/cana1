@@ -34,9 +34,9 @@ def login():
 # Bloqueia o menu inicialmente
 st.sidebar.title("Menu")
 st.sidebar.write("Faça login para desbloquear o menu.")
-st.sidebar.write("")  # Adiciona um espaço em branco
-st.sidebar.write("")  # Adiciona um espaço em branco
-st.sidebar.write("")  # Adiciona um espaço em branco
+st.sidebar.write("motorista")  # Adiciona um espaço em branco
+st.sidebar.write("cliente")  # Adiciona um espaço em branco
+st.sidebar.write("usuario")  # Adiciona um espaço em branco
 
 if __name__ == "__main__":
     login()
