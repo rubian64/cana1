@@ -50,5 +50,4 @@ def menu():
 # Loop que executa a função de login até que o usuário esteja logado
 while not st.session_state.logged_in:
     login()
-
-menu()
+    menu()
